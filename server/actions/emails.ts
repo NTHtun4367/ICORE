@@ -2,6 +2,7 @@
 
 import EmailConfirmationTemplate from "@/components/email-template";
 import PasswordResetEmail from "@/components/password-reset-email-template";
+import TwoFactorCodeEmail from "@/components/two-factor-emal-template";
 import { getBaseUrl } from "@/lib/get-baseUrl";
 import { Resend } from "resend";
 
@@ -28,10 +29,7 @@ export const sendConfirmEmail = async (
   }
 };
 
-export const sendPasswordResetEmail = async (
-  email: string,
-  token: string,
-) => {
+export const sendPasswordResetEmail = async (email: string, token: string) => {
   const resetPasswordLink = `${currentBaseUrl}/change-password?token=${token}`;
 
   const { data, error } = await resend.emails.send({
@@ -39,6 +37,19 @@ export const sendPasswordResetEmail = async (
     to: email,
     subject: "Reset Your Password - Alert from ICORE",
     react: PasswordResetEmail({ resetPasswordLink }),
+  });
+
+  if (error) {
+    console.log(error);
+  }
+};
+
+export const sendTwoFactorEmail = async (email: string, code: string) => {
+  const { data, error } = await resend.emails.send({
+    from: "onboarding@resend.dev",
+    to: email,
+    subject: "Two Factor Authentication Code - ICORE",
+    react: TwoFactorCodeEmail({ twoFactorCode: code }),
   });
 
   if (error) {

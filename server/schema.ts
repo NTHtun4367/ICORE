@@ -81,3 +81,23 @@ export const resetPasswordToken = pgTable(
     compoundKey: primaryKey({ columns: [vt.id, vt.token] }),
   })
 );
+
+export const twoFactorTokens = pgTable(
+  "two_factor_tokens",
+  {
+    id: text("id")
+      .notNull()
+      .$defaultFn(() => createId()),
+    token: text("token").notNull(),
+    expires: timestamp("expires", { mode: "date" }).notNull(),
+    email: text("email").notNull(),
+    userId: text("userId").references(() => users.id, { onDelete: "cascade" }),
+  },
+  (token) => [
+    {
+      compoundKey: primaryKey({
+        columns: [token.id, token.token],
+      }),
+    },
+  ]
+);

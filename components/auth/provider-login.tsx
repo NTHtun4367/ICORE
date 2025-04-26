@@ -17,7 +17,7 @@ const ProviderLogin = () => {
           })
         }
       >
-        Login with google
+        Login with Google
         <FcGoogle />
       </Button>
       <Button
@@ -29,7 +29,7 @@ const ProviderLogin = () => {
           })
         }
       >
-        Login with github
+        Login with Github
         <FaGithub />
       </Button>
     </div>
