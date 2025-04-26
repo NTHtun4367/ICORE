@@ -15,6 +15,7 @@ import { changePassword } from "@/server/actions/change-password";
 import { resetPassword } from "@/server/actions/reset-password";
 import { changePasswordSchema } from "@/types/change-password";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signOut } from "next-auth/react";
 import { useAction } from "next-safe-action/hooks";
 import { useSearchParams } from "next/navigation";
 import React from "react";
@@ -39,6 +40,7 @@ const ChangePassword = () => {
       if (data?.error) {
         toast.error(data?.error);
       } else if (data?.success) {
+        signOut({ callbackUrl: "/auth/login" });
         toast.success(data?.success);
       }
     },
