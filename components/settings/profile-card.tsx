@@ -2,7 +2,6 @@
 
 import { Session } from "next-auth";
 import SettingsCard from "./settings-card";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { UserRoundPen } from "lucide-react";
 
 import {
@@ -30,6 +29,7 @@ import {
 import { Button } from "../ui/button";
 import ProfileForm from "./profile-form";
 import { useState } from "react";
+import AvatarUploadForm from "./avatar-upload-form";
 
 type ProfileCardProps = {
   session: Session;
@@ -46,16 +46,19 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
   return (
     <SettingsCard>
       <div className="flex items-start justify-between">
-        <div className="flex items-center gap-4">
-          <Avatar className="w-14 h-14">
-            <AvatarImage src={session?.user?.image!} alt="profile" />
-            <AvatarFallback className="bg-primary text-white font-medium">
-              {session?.user?.name?.slice(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
+        <div className="flex flex-wrap items-start gap-4">
+          <AvatarUploadForm
+            name={session.user.name!}
+            image={session.user.image}
+            email={session.user.email!}
+          />
           <div>
-            <h2 className="text-lg font-semibold">{session?.user?.name}</h2>
             <p className="text-sm font-medium text-muted-foreground">
+              Display Name:
+            </p>
+            <h2 className="text-lg font-semibold">@{session?.user?.name}</h2>
+            <p className="text-sm font-medium text-muted-foreground">Email:</p>
+            <p className="text-sm lg:text-base font-medium">
               {session?.user?.email}
             </p>
           </div>
