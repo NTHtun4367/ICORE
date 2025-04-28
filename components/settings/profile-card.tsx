@@ -46,7 +46,7 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
   return (
     <SettingsCard>
       <div className="flex items-start justify-between">
-        <div className="flex flex-wrap items-start gap-4">
+        <div className="flex flex-wrap flex-col lg:flex-row items-start gap-4">
           <AvatarUploadForm
             name={session.user.name!}
             image={session.user.image}
@@ -56,7 +56,9 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
             <p className="text-sm font-medium text-muted-foreground">
               Display Name:
             </p>
-            <h2 className="text-lg font-semibold">@{session?.user?.name}</h2>
+            <h2 className="text-sm lg:text-base font-medium">
+              @{session?.user?.name}
+            </h2>
             <p className="text-sm font-medium text-muted-foreground">Email:</p>
             <p className="text-sm lg:text-base font-medium">
               {session?.user?.email}
@@ -107,7 +109,6 @@ const ProfileCard = ({ session }: ProfileCardProps) => {
                 setIsOpen={handleIsOpen}
               />
               <DrawerFooter>
-                {/* <Button>Submit</Button> */}
                 <DrawerClose>
                   <Button variant="outline" className="w-full">
                     Cancel
