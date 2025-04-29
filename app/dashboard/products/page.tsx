@@ -1,9 +1,29 @@
-import React from 'react'
+import { db } from "@/server";
+import { DataTable } from "./data-table";
+import { columns } from "./columns";
+import placeHolderImage from "@/public/placeholder.jpg";
 
-const Products = () => {
+const Products = async () => {
+  const products = await db.query.products.findMany({
+    orderBy: (products, { desc }) => [desc(products.id)],
+  });
+
+  const productData = products.map((product) => {
+    return {
+      id: product.id,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      variants: [],
+      image: placeHolderImage.src,
+    };
+  });
+
   return (
-    <div>Products</div>
-  )
-}
+    <main>
+      <DataTable columns={columns} data={productData} />
+    </main>
+  );
+};
 
-export default Products
+export default Products;

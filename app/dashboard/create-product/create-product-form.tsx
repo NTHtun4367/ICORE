@@ -24,13 +24,31 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import Tiptap from "./tiptap";
 import { useAction } from "next-safe-action/hooks";
-import { updateProduct } from "@/server/actions/products";
+import { getSingleProduct, updateProduct } from "@/server/actions/products";
 import { toast } from "sonner";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const CreateProductForm = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const isEditMode = searchParams.get("edit_id") || null;
+
+  const isProductExist = async (id: number) => {
+    if (isEditMode) {
+      const response = await getSingleProduct(id);
+      if (response.error) {
+        toast.error(response.error);
+        router.push("/dashboard/products");
+        return;
+      } else if (response.success) {
+        form.setValue("id", response.success.id);
+        form.setValue("title", response.success.title);
+        form.setValue("description", response.success.description);
+        form.setValue("price", response.success.price);
+      }
+    }
+  };
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
     defaultValues: {
@@ -54,18 +72,28 @@ const CreateProductForm = () => {
 
   const onSubmit = (values: z.infer<typeof productSchema>) => {
     const { id, title, description, price } = values;
-    execute({ title, description, price });
+    execute({ id, title, description, price });
   };
 
   useEffect(() => {
     form.setValue("description", "");
   }, [form]);
 
+  useEffect(() => {
+    if (isEditMode) {
+      isProductExist(Number(isEditMode));
+    }
+  }, []);
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Create Product</CardTitle>
-        <CardDescription>Create a new product</CardDescription>
+        <CardTitle>{isEditMode ? "Edit Product" : "Create Product"}</CardTitle>
+        <CardDescription>
+          {isEditMode
+            ? `Edit your product: ${form.getValues("title")}`
+            : "Create a new product"}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -126,7 +154,7 @@ const CreateProductForm = () => {
               className="w-full"
               disabled={status === "executing"}
             >
-              Submit
+              {isEditMode ? "Update Product" : "Create Product"}
             </Button>
           </form>
         </Form>

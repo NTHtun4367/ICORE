@@ -1,4 +1,6 @@
-import { productSchema } from "@/types/product-schema";
+"use server";
+
+import { deleteProductSchema, productSchema } from "@/types/product-schema";
 import { actionClient } from "./safe-action";
 import { db } from "..";
 import { eq } from "drizzle-orm";
@@ -20,7 +22,7 @@ export const updateProduct = actionClient
           .set({ title, description, price })
           .where(eq(products.id, id));
 
-        // revalidatePath("/dashboard/products");
+        revalidatePath("/dashboard/products");
         return { success: `${title} updated successfully.` };
       } else {
         const product = await db
@@ -28,10 +30,39 @@ export const updateProduct = actionClient
           .values({ title, description, price })
           .returning();
 
-        // revalidatePath("/dashboard/products");
+        revalidatePath("/dashboard/products");
         return { success: `${product[0].title} created successfully.` };
       }
     } catch (error) {
       return { error: "Something went wrong" };
+    }
+  });
+
+export const getSingleProduct = async (id: number) => {
+  try {
+    const product = await db.query.products.findFirst({
+      where: eq(products.id, id),
+    });
+
+    if (!product) {
+      return { error: "Product not found!" };
+    }
+
+    return { success: product };
+  } catch (error) {
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const deleteProduct = actionClient
+  .schema(deleteProductSchema)
+  .action(async ({ parsedInput: { id } }) => {
+    try {
+      await db.delete(products).where(eq(products.id, id));
+
+      revalidatePath("/dashobard/products");
+      return { success: "Product deleted successfully!" };
+    } catch (error) {
+      return { error: "Something went wrong!" };
     }
   });

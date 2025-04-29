@@ -12,6 +12,7 @@ import {
   ListOrdered,
   Strikethrough,
 } from "lucide-react";
+import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
 type TiptapProps = {
@@ -51,6 +52,10 @@ const Tiptap = ({ val }: TiptapProps) => {
       });
     },
   });
+
+  useEffect(() => {
+    if (editor?.isEmpty) editor.commands.setContent(val);
+  }, [val]);
 
   return (
     <div className="space-y-2">
