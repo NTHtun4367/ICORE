@@ -8,7 +8,7 @@ type TagsInputProps = {
 };
 
 const TagsInput = forwardRef<HTMLInputElement, TagsInputProps>(
-  ({ value, handleOnChange, ...props }) => {
+  ({ value, handleOnChange, ...props }, ref) => {
     const [tagData, setTagData] = useState("");
 
     const addNewTag = () => {

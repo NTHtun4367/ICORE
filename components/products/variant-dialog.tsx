@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import TagsInput from "./tags-input";
+import VariantImages from "./variant-images";
 
 type VariantDialogProps = {
   children: React.ReactNode;
@@ -60,7 +61,7 @@ const VariantDialog = ({
   return (
     <Dialog>
       <DialogTrigger>{children}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-[600px] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             {editMode ? "Update an existing" : "Create new"} product's variant
@@ -114,6 +115,7 @@ const VariantDialog = ({
                 </FormItem>
               )}
             />
+            <VariantImages />
             <Button type="submit" className="w-full">
               {editMode ? "Update" : "Create"} product's variant
             </Button>

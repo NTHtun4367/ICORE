@@ -25,12 +25,12 @@ const DashboardNavigation = ({ routes }: DashboardNavigationProps) => {
             <span
               className={cn(
                 "flex items-center gap-1 text-gray-400 font-medium text-sm",
-                pathName === route.path && "text-primary text-base font-bold"
+                pathName === route.path &&
+                  "text-white bg-primary px-2 py-1 rounded-md"
               )}
             >
               {route.icons}
               {route.label}
-              {index !== routes.length - 1 && " |"}
             </span>
           </Link>
         ))}
