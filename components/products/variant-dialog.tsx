@@ -1,7 +1,7 @@
 "use client";
 
 import { VariantsWithImagesTags } from "@/lib/infer-type";
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -27,6 +27,9 @@ import {
 import { Input } from "@/components/ui/input";
 import TagsInput from "./tags-input";
 import VariantImages from "./variant-images";
+import { useAction } from "next-safe-action/hooks";
+import { createVariant } from "@/server/actions/variants";
+import { toast } from "sonner";
 
 type VariantDialogProps = {
   children: React.ReactNode;
@@ -41,11 +44,12 @@ const VariantDialog = ({
   productID,
   variant,
 }: VariantDialogProps) => {
+  const [open, setOpen] = useState(false);
   const form = useForm<z.infer<typeof variantSchema>>({
     resolver: zodResolver(variantSchema),
     defaultValues: {
       productID,
-      color: "#000",
+      color: "#000000",
       tags: [],
       variantImages: [],
       id: undefined,
@@ -54,8 +58,30 @@ const VariantDialog = ({
     },
   });
 
+  const { execute, result, status } = useAction(createVariant, {
+    onSuccess({ data }) {
+      form.reset();
+      setOpen(false);
+      if (data?.error) {
+        toast.error(data?.error);
+      } else if (data?.success) {
+        toast.success(data?.success);
+      }
+    },
+  });
+
   const onSubmit = (values: z.infer<typeof variantSchema>) => {
-    console.log(values);
+    const { color, editMode, productID, productType, tags, variantImages, id } =
+      values;
+    execute({
+      color,
+      editMode,
+      productID,
+      productType,
+      tags,
+      variantImages,
+      id,
+    });
   };
 
   return (
@@ -116,7 +142,11 @@ const VariantDialog = ({
               )}
             />
             <VariantImages />
-            <Button type="submit" className="w-full">
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={status === "executing"}
+            >
               {editMode ? "Update" : "Create"} product's variant
             </Button>
           </form>
