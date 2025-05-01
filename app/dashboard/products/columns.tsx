@@ -28,7 +28,7 @@ export type Product = {
   description: string;
   image: string;
   price: number;
-  variants: VariantsWithImagesTags;
+  variants: VariantsWithImagesTags[];
 };
 
 const ActionsCell = (row: Row<Product>) => {
@@ -91,12 +91,22 @@ export const columns: ColumnDef<Product>[] = [
       const variants = row.getValue("variants") as VariantsWithImagesTags[];
 
       return (
-        <div>
-          {variants.map((variant) => (
-            <div key={variant.id}>
-              <p>{variant.color}</p>
-            </div>
-          ))}
+        <div className="flex items-center gap-1">
+          {variants.map((v) => {
+            return (
+              <VariantDialog
+                editMode={true}
+                productID={row.original.id}
+                variant={v}
+                key={v.id}
+              >
+                <div
+                  className="w-5 h-5 rounded-full"
+                  style={{ backgroundColor: v.color }}
+                />
+              </VariantDialog>
+            );
+          })}
           <VariantDialog editMode={false} productID={row.original.id}>
             <CirclePlus className="w-5 h-5 text-gray-500 hover:text-black duration-200 cursor-pointer" />
           </VariantDialog>

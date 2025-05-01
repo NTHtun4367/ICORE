@@ -85,7 +85,7 @@ const VariantDialog = ({
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>{children}</DialogTrigger>
       <DialogContent className="max-h-[600px] overflow-y-auto">
         <DialogHeader>
