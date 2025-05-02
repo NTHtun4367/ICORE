@@ -1,7 +1,7 @@
 "use client";
 
 import { VariantsWithImagesTags } from "@/lib/infer-type";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -28,8 +28,9 @@ import { Input } from "@/components/ui/input";
 import TagsInput from "./tags-input";
 import VariantImages from "./variant-images";
 import { useAction } from "next-safe-action/hooks";
-import { createVariant } from "@/server/actions/variants";
+import { createVariant, deleteVariant } from "@/server/actions/variants";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 type VariantDialogProps = {
   children: React.ReactNode;
@@ -70,6 +71,18 @@ const VariantDialog = ({
     },
   });
 
+  const variantDelete = useAction(deleteVariant, {
+    onSuccess({ data }) {
+      form.reset();
+      setOpen(false);
+      if (data?.error) {
+        toast.error(data?.error);
+      } else if (data?.success) {
+        toast.success(data?.success);
+      }
+    },
+  });
+
   const onSubmit = (values: z.infer<typeof variantSchema>) => {
     const { color, editMode, productID, productType, tags, variantImages, id } =
       values;
@@ -83,6 +96,39 @@ const VariantDialog = ({
       id,
     });
   };
+
+  const getOldData = () => {
+    if (!editMode) {
+      form.reset();
+      return;
+    }
+
+    if (editMode && variant) {
+      form.setValue("editMode", true);
+      form.setValue("id", variant.id);
+      form.setValue("color", variant.color);
+      form.setValue(
+        "tags",
+        variant.variantTags.map((t) => t.tag)
+      );
+      form.setValue(
+        "variantImages",
+        variant.variantImages.map((img) => {
+          return {
+            url: img.image_url,
+            size: Number(img.size),
+            name: img.name,
+          };
+        })
+      );
+      form.setValue("productID", variant.productID);
+      form.setValue("productType", variant.productType);
+    }
+  };
+
+  useEffect(() => {
+    getOldData();
+  }, []);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -142,13 +188,32 @@ const VariantDialog = ({
               )}
             />
             <VariantImages />
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={status === "executing"}
-            >
-              {editMode ? "Update" : "Create"} product's variant
-            </Button>
+            <div className={cn(editMode && "flex gap-2")}>
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={status === "executing" || !form.formState.isValid}
+              >
+                {editMode ? "Update" : "Create"} product's variant
+              </Button>
+              {editMode && (
+                <Button
+                  type="button"
+                  variant={"destructive"}
+                  className="w-full"
+                  disabled={
+                    variantDelete.status === "executing" ||
+                    !form.formState.isValid
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    variantDelete.execute({ id: variant?.id! });
+                  }}
+                >
+                  Delete product's variant
+                </Button>
+              )}
+            </div>
           </form>
         </Form>
       </DialogContent>
