@@ -51,7 +51,14 @@ const VariantDialog = ({
     defaultValues: {
       productID,
       color: "#000000",
-      tags: [],
+      tags: [
+        "iPhone",
+        "iPad",
+        "MacBook",
+        "Apple Watch",
+        "Accessories",
+        "Cover",
+      ],
       variantImages: [],
       id: undefined,
       productType: "Black",

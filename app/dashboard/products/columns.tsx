@@ -102,13 +102,13 @@ export const columns: ColumnDef<Product>[] = [
 
       return (
         <div className="flex items-center gap-1">
-          {variants.map((v) => {
+          {variants.map((v, i) => {
             return (
               <VariantDialog
                 editMode={true}
                 productID={row.original.id}
                 variant={v}
-                key={v.id}
+                key={i}
               >
                 <div
                   className="w-5 h-5 rounded-full"
