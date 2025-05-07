@@ -44,7 +44,10 @@ const UserButton = ({ user }: Session) => {
               </div>
             </div>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer group hover:bg-primary/10">
+            <DropdownMenuItem
+              className="cursor-pointer group hover:bg-primary/10"
+              onClick={() => router.push("/dashboard/orders")}
+            >
               <Truck className="group-hover:translate-x-1 group-hover:text-primary transition-all duration-300 ease-in-out" />
               <span className="text-sm font-medium">My Orders</span>
             </DropdownMenuItem>

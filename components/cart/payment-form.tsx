@@ -9,18 +9,32 @@ import {
 import { Button } from "../ui/button";
 import { processPayment } from "@/server/actions/payment";
 import { useCartStore } from "@/store/cart-store";
+import { useAction } from "next-safe-action/hooks";
+import { createOrder } from "@/server/actions/order";
+import { toast } from "sonner";
 
 type PaymentFormProps = {
   totalPrice: number;
 };
 
 const PaymentForm = ({ totalPrice }: PaymentFormProps) => {
-  const cart = useCartStore((state) => state.cart)
-  const setCartPosition = useCartStore(state=>state.setCartPosition)
+  const cart = useCartStore((state) => state.cart);
+  const setCartPosition = useCartStore((state) => state.setCartPosition);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const stripe = useStripe();
   const elements = useElements();
+
+  const { execute } = useAction(createOrder, {
+    onSuccess({ data }) {
+      if (data?.error) {
+        toast.error(data.error)
+      } else if (data?.success) {
+        toast.success(data.success)
+        setCartPosition("Success");
+      }
+    },
+  });
 
   const onSubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,8 +87,15 @@ const PaymentForm = ({ totalPrice }: PaymentFormProps) => {
         return;
       } else {
         setLoading(false);
-        console.log("Order is on the way.")
-        setCartPosition("Success")
+        execute({
+          status: "pending",
+          totalPrice,
+          products: cart.map((citem) => ({
+            productId: citem.id,
+            quantity: citem.variant.quantity,
+            variantId: citem.variant.variantId,
+          })),
+        });
       }
     }
   };
