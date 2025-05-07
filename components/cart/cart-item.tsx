@@ -19,6 +19,7 @@ const CartItem = () => {
   const cart = useCartStore((state) => state.cart);
   const addToCart = useCartStore((state) => state.addToCart);
   const removeFormCart = useCartStore((state) => state.removeFromCart);
+  const setCartPosition = useCartStore((state) => state.setCartPosition);
 
   return (
     <main className="lg:w-1/2 mx-auto">
@@ -109,7 +110,11 @@ const CartItem = () => {
               </TableRow>
             </TableFooter>
           </Table>
-          <Button className="w-full mt-2 mb-4" size={"lg"}>
+          <Button
+            className="w-full mt-2 mb-4"
+            size={"lg"}
+            onClick={() => setCartPosition("Checkout")}
+          >
             Place Order
           </Button>
         </div>

@@ -137,10 +137,10 @@ const CreateProductForm = () => {
                         className="p-2 bg-muted rounded-md"
                       />
                       <Input
-                        placeholder="Price shown in MMK"
+                        placeholder="Price shown in USD"
                         {...field}
                         type="number"
-                        step={100}
+                        // step={100}
                         min={0}
                       />
                     </div>

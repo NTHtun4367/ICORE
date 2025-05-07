@@ -18,12 +18,19 @@ export type CartType = {
   cart: CartItem[];
   addToCart: (item: CartItem) => void;
   removeFromCart: (item: CartItem) => void;
+  cartPosition: "Order" | "Checkout" | "Success";
+  setCartPosition: (position: "Order" | "Checkout" | "Success") => void;
+  clearCart: () => void;
 };
 
 export const useCartStore = create(
   persist<CartType>(
     (set) => ({
       cart: [],
+      cartPosition: "Order",
+      clearCart: () => set(() => ({ cart: [] })),
+      setCartPosition: (position) =>
+        set((state) => ({ cartPosition: position })),
       addToCart: (item) =>
         set((state) => {
           const existingItem = state.cart.find(

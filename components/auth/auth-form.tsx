@@ -30,7 +30,13 @@ const AuthForm = ({
         <CardTitle>{formTitle}</CardTitle>
       </CardHeader>
       <CardContent>
-        {children} {showProvider && <ProviderLogin />}
+        {children}
+        <div className="flex items-center gap-2 mb-2">
+          <p className="border border-gray-300 w-full"></p>
+          <p>or</p>
+          <p className="border border-gray-300 w-full"></p>
+        </div>
+        {showProvider && <ProviderLogin />}
       </CardContent>
       <CardFooter>
         <AuthFooter footerLabel={footerLabel} footerHref={footerHref} />

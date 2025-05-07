@@ -28,7 +28,7 @@ const Products = ({ productsWithVariants }: ProductsProps) => {
               {p.product.title.substring(0, 28) + "..."}
             </h3>
             <p className="text-sm font-medium">
-              {formatCurrency(p.product.price)} MMK
+              {formatCurrency(p.product.price)} USD
             </p>
           </Link>
         );
