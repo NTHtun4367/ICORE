@@ -1,15 +1,22 @@
 import AnalyticCard from "@/components/analytics/analytic-card";
-import { analytics } from "@/server/actions/analytics";
+import AnalyticChart from "@/components/analytics/analytic-chart";
+import { analytics, weeklyAnalytics } from "@/server/actions/analytics";
+import { auth } from "@/server/auth";
 import { Box, Clock, Package, Users } from "lucide-react";
+import { redirect } from "next/navigation";
 
 const Analytics = async () => {
+  const session = await auth();
+
+  if (session?.user.role !== "admin") return redirect("/");
+
   const analyticsData = await analytics();
-  console.log(analyticsData);
+  const weeklyAnalyticsData = await weeklyAnalytics();
 
   return (
-    <main className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4">
+    <main className="mb-8">
       {analyticsData && (
-        <>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4 mb-4">
           <AnalyticCard
             title="Pending Orders"
             count={analyticsData.pendingOrders}
@@ -34,8 +41,9 @@ const Analytics = async () => {
             icon={<Box />}
             href="/dashboard/products"
           />
-        </>
+        </div>
       )}
+      <AnalyticChart data={weeklyAnalyticsData!} />
     </main>
   );
 };
