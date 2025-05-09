@@ -11,6 +11,9 @@ const Settings = async () => {
 
   if (!session?.user) return redirect("/");
 
+  console.log(session.user.isOauth);
+  
+
   return (
     <>
       <h2 className="text-2xl font-bold mb-4">Account Settings</h2>

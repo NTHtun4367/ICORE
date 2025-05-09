@@ -29,12 +29,16 @@ const CartDrawer = ({ children }: CartDrawerProps) => {
       <DrawerContent>
         <DrawerHeader className="lg:text-center">
           <DrawerTitle>Your Cart</DrawerTitle>
-          <DrawerDescription className="mb-4">Stay home. Stay safe.</DrawerDescription>
+          <DrawerDescription className="mb-4">
+            Stay home. Stay safe.
+          </DrawerDescription>
           <CartStatus />
         </DrawerHeader>
-        {cartPosition === "Order" && <CartItem />}
-        {cartPosition === "Checkout" && <Payment />}
-        {cartPosition === "Success" && <Success />}
+        <div className="px-2">
+          {cartPosition === "Order" && <CartItem />}
+          {cartPosition === "Checkout" && <Payment />}
+          {cartPosition === "Success" && <Success />}
+        </div>
       </DrawerContent>
     </Drawer>
   );

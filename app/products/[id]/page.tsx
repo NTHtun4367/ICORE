@@ -3,6 +3,7 @@ import ImageSlider from "@/components/products/image-slider";
 import VariantPicker from "@/components/products/variant-picker";
 import formatCurrency from "@/lib/formatCurrency";
 import { db } from "@/server";
+import { auth } from "@/server/auth";
 import { productVariants } from "@/server/schema";
 import { eq } from "drizzle-orm";
 
@@ -32,6 +33,7 @@ export async function generateStaticParams() {
 }
 
 const SingleProduct = async ({ params }: SingleProductProps) => {
+  const session = await auth();
   const productWithVariants = await db.query.productVariants.findFirst({
     where: eq(productVariants.id, params.id),
     with: {
@@ -53,7 +55,9 @@ const SingleProduct = async ({ params }: SingleProductProps) => {
       {productWithVariants && (
         <main className="flex flex-col lg:flex-row gap-4 my-6">
           <div className="flex-1">
-            <ImageSlider variants={productWithVariants.product.productVariants} />
+            <ImageSlider
+              variants={productWithVariants.product.productVariants}
+            />
           </div>
           <div className="flex-1 lg:mt-8">
             <h2 className="text-2xl font-bold">
@@ -63,7 +67,8 @@ const SingleProduct = async ({ params }: SingleProductProps) => {
               {productWithVariants.productType} Variant
             </p>
             <hr className="mb-4 mt-3" />
-            <div className="leading-8"
+            <div
+              className="leading-8"
               dangerouslySetInnerHTML={{
                 __html: productWithVariants.product.description,
               }}
@@ -84,7 +89,7 @@ const SingleProduct = async ({ params }: SingleProductProps) => {
                 />
               ))}
             </div>
-            <AddToCart />
+            {session?.user.role !== "admin" && <AddToCart />}
           </div>
         </main>
       )}

@@ -70,7 +70,11 @@ const Register = () => {
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="username" {...field} />
+                    <Input
+                      placeholder="username"
+                      {...field}
+                      disabled={status === "executing"}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -83,7 +87,11 @@ const Register = () => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="icore@gmail.com" {...field} />
+                    <Input
+                      placeholder="icore@gmail.com"
+                      {...field}
+                      disabled={status === "executing"}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -96,7 +104,12 @@ const Register = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="******" {...field} type="password" />
+                    <Input
+                      placeholder="******"
+                      {...field}
+                      type="password"
+                      disabled={status === "executing"}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

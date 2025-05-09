@@ -72,7 +72,7 @@ const SearchBox = ({ productsWithVariants }: SearchBoxProps) => {
         </div>
       )}
       {searchResults.length === 0 && searchKey !== "" && (
-        <p className="absolute bg-white rounded-md shadow-sm w-full text-sm font-medium p-2 mt-4 text-red-500 ps-4">
+        <p className="absolute bg-white rounded-md shadow-md w-full text-sm font-medium p-2 mt-4 text-red-500 ps-4">
           No results found with this product name.
         </p>
       )}

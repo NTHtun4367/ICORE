@@ -11,7 +11,7 @@ const AppNav = async () => {
     <nav className="flex items-center justify-between py-4">
       <NavLogo />
       <div className="flex items-center gap-4">
-        <CartBtn />
+        {session?.user.role !== "admin" && <CartBtn />}
         <UserButton user={session?.user} expires={session?.expires!} />
       </div>
     </nav>
