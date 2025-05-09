@@ -1,4 +1,5 @@
 import Products from "@/components/products";
+import SearchBox from "@/components/products/search-box";
 import { db } from "@/server";
 
 export default async function Home() {
@@ -12,7 +13,7 @@ export default async function Home() {
   
   return (
     <main>
-      <h2>Nav</h2>
+      <SearchBox productsWithVariants={productWithVariants} />
       <Products productsWithVariants={productWithVariants} />
     </main>
   );
