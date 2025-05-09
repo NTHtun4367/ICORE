@@ -12,7 +12,7 @@ const AppNav = async () => {
       <NavLogo />
       <div className="flex items-center gap-4">
         {session?.user.role !== "admin" && <CartBtn />}
-        <UserButton user={session?.user} expires={session?.expires!} />
+        <UserButton user={session?.user!} expires={session?.expires!} />
       </div>
     </nav>
   );

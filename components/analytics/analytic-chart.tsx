@@ -52,8 +52,8 @@ const AnalyticChart = ({ data }: AnalyticChartProps) => {
             accessibilityLayer
             data={data}
             margin={{
-              top: 20,
-              bottom: 20,
+              top: 25,
+              bottom: 25,
               left: 12,
               right: 12,
             }}
