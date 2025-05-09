@@ -33,6 +33,7 @@ import { desc, eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import OrderDropdown from "./order-dropdown";
+import { format } from "date-fns";
 
 const Orders = async () => {
   const session = await auth();
@@ -83,7 +84,7 @@ const Orders = async () => {
                   <TableCell className="font-medium">{order.id}</TableCell>
                   <TableCell>{formatCurrency(order.total)}</TableCell>
                   <TableCell className="text-center">
-                    {order.created?.toString()}
+                    {format(new Date(order.created?.toString()!), "dd/MM/yyyy")}
                   </TableCell>
                   <TableCell>
                     {order.status === "pending" && (

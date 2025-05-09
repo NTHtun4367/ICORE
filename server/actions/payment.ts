@@ -12,7 +12,10 @@ export const processPayment = actionClient
   .action(async ({ parsedInput: { amount, cart, currency } }) => {
     const user = await auth();
 
-    if (!user) return { error: "You need to be logged in!" };
+    if (!user)
+      return {
+        isLogin: { message: "You need to be logged in!", status: false },
+      };
     if (!amount) return { error: "No products in cart!" };
 
     const paymentIntent = await stripe.paymentIntents.create({

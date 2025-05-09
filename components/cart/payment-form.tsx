@@ -62,7 +62,11 @@ const PaymentForm = ({ totalPrice }: PaymentFormProps) => {
         productId: citem.id,
         quantity: citem.variant.quantity,
       })),
-    });
+    })
+
+    if(!response?.data?.isLogin?.status){
+      toast.error(response?.data?.isLogin?.message)
+    }
 
     if (response?.data?.error) {
       setErrorMsg(response.data.error);
